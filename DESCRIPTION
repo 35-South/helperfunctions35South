@@ -9,8 +9,14 @@ License: MIT + file LICENSE
 Imports: 
     lifecycle,
     magrittr,
-    rlang (>= 0.4.11),
-    tibble
+    rlang (>= 0.1.2),
+    tibble,
+    usethis,
+    purrr,
+    dplyr, 
+    DBI, 
+    glue, 
+    RSQLite
 Suggests: 
     roxygen2,
     spelling,
