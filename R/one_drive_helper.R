@@ -5,6 +5,10 @@
 #' to provide the path extension which the part of the path after the root
 #' 'Documents - Data Science' directory in  
 #' 
+#' known users:
+#' 
+#' sam, ryan, sonal, christian, janet
+#' 
 #' 
 #'
 #' @param user (character) This is your user name. Example: "Nikhil Chandra"
@@ -36,6 +40,35 @@ create_one_drive_path <- function(user = "Nikhil Chandra",
                                   team = "OneDrive - 35 South",
                                   path_extension = "raw data/abs_geo_structures") {
   
-  glue::glue("C:/Users/{user}/{team}/Documents - Data Science/{path_extension}")
+  if(tolower(user) == "janet") {
+   base_path = "C:/Users/janet/OneDrive - 35 South/Shared Documents - Data Science/"
+  }
+  
+  if(tolower(user) == "ryan") {
+    base_path = "C:/Users/61433/35 South/Data Science - Documents/"
+  }
+  
+  if(tolower(user) == "sonal") {
+    base_path = "C:/Users/sonal/OneDrive - 35 South/Shared Documents - Data Science/"
+  }
+  
+  if(tolower(user) == "sam") {
+    
+    base_path <- "C:/Users/sam/OneDrive - 35 South/Shared Documents - Data Science/"
+    
+  }
+  
+  if(tolower(user) == "christian") {
+    
+    base_path <- "C:/Users/chris/OneDrive - 35 South/Shared Documents - Data Science/"
+    
+  }
+  
+  if(user == "Nikhil Chandra") {
+    glue::glue("C:/Users/{user}/{team}/Documents - Data Science/")
+  }
+  
+  glue::glue("{base_path}{path_extension}")
+  
   
 }
