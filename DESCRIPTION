@@ -16,7 +16,8 @@ Imports:
     dplyr, 
     DBI, 
     glue, 
-    RSQLite
+    RSQLite,
+    sf
 Suggests: 
     roxygen2,
     spelling,
