@@ -72,7 +72,8 @@ find_db_size <- function(conn,
 
 }
 
-fast_db_sample <- function(conn,samples,
+fast_db_sample <- function(conn,
+                           samples,
                            max_value,
                            filter_statement = NULL,
                            return_query = FALSE){
@@ -186,7 +187,7 @@ connect_db_local <- function(path){
 write_table_sql_lite <- function(.data,
                                  table_name,
                                  conn){
-  DBI::dbWriteTable(conn, table_name, .data)
+  DBI::dbWriteTable(conn = conn, name = table_name, value = .data)
 }
 
 #' This function will upload new rows to an existing table in a sql lite 
