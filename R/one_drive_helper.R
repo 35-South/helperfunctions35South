@@ -18,7 +18,8 @@
 #' "C:/Users/Nikhil Chandra/OneDrive - 35 South/Documents - Data Science/". This 
 #' is the base path, if your file is in the folder raw_data/abs_anzic_income_SA2 
 #' with the file name "sa2_income_industry.csv" then you would provide 
-#' "raw_data/abs_anzic_income_SA2/sa2_income_industry.csv"
+#' "raw_data/abs_anzic_income_SA2/sa2_income_industry.csv". YOUR PATH MUST 
+#' NOT HAVE THE WINDOWS PATH FORM USING \. YOU MUST USE /. 
 #'
 #' @return (file path) This function will return the file path based on your 
 #' inputs. 
@@ -35,40 +36,113 @@
 #'   
 #' data_read<- read_csv(file_path)
 #' 
+#' # If you want to get AusTender data: 
+#' 
+#' # Auto Guess Path:
+#' path_for_data <- 
+#'   create_one_drive_path(path_extension = "raw_data/AusTender_data")
+#'   
+#' files_in_folder <- 
+#'   fs::dir_info(path_for_data) %>% 
+#'   dplyr::pull(path) 
+#'  
+#' read_in_first_csv_file <- read_csv(files_in_folder[1])
+#' 
+#' # Dont Auto Guess Path     
+#' 
+#' path_for_data <- 
+#'   create_one_drive_path(
+#'   user = "janet",
+#'   path_extension = "raw_data/AusTender_data"
+#'   )
+#'   
+#' files_in_folder <- 
+#'   fs::dir_info(path_for_data) %>% 
+#'   dplyr::pull(path) 
+#'  
+#' read_in_first_csv_file <- read_csv(files_in_folder[1])
 #' }
-create_one_drive_path <- function(user = "Nikhil Chandra",
-                                  team = "OneDrive - 35 South",
-                                  path_extension = "raw data/abs_geo_structures") {
+create_one_drive_path <- function(user = NULL,
+                                  path_extension = "raw data/AusTender_data") {
   
-  if(tolower(user) == "janet") {
-   base_path = "C:/Users/janet/OneDrive - 35 South/Shared Documents - Data Science/"
-  }
+  check_system_vars <- detect_user_onedrive()
   
-  if(tolower(user) == "ryan") {
-    base_path = "C:/Users/61433/35 South/Data Science - Documents/"
-  }
-  
-  if(tolower(user) == "sonal") {
-    base_path = "C:/Users/sonal/OneDrive - 35 South/Shared Documents - Data Science/"
-  }
-  
-  if(tolower(user) == "sam") {
+  if(is.null(user)) {
+    base_path <- check_system_vars[1]
+  } else {
+   
+    if(length(check_system_vars) > 1)
+      
+      if(tolower(user) == "janet") {
+        base_path = "C:/Users/janet/OneDrive - 35 South/Shared Documents - Data Science/"
+      }
     
-    base_path <- "C:/Users/sam/OneDrive - 35 South/Shared Documents - Data Science/"
+    if(tolower(user) == "ryan") {
+      base_path = "C:/Users/61433/35 South/Data Science - Documents/"
+    }
+    
+    if(tolower(user) == "sonal") {
+      base_path = "C:/Users/sonal/OneDrive - 35 South/Shared Documents - Data Science/"
+    }
+    
+    if(tolower(user) == "sam") {
+      
+      base_path <- "C:/Users/sam/OneDrive - 35 South/Shared Documents - Data Science/"
+      
+    }
+    
+    if(tolower(user) == "christian") {
+      
+      base_path <- "C:/Users/chris/OneDrive - 35 South/Shared Documents - Data Science/"
+      
+    }
+     
+  }
+  
+  normalised_path_ext <- stringr::str_split(path_extension, pattern = "/") %>% 
+    unlist()
+  
+  returned_path <- fs::dir_info(base_path) %>%
+    dplyr::filter(stringr::str_detect(path, pattern = "Documents - Data Science")) %>% 
+    dplyr::pull(path)
+  
+  for (i in 1:length(normalised_path_ext)) {
+   
+    if(length(returned_path) != 0) {
+      returned_path <- 
+        fs::dir_info(returned_path) %>% 
+        dplyr::filter(
+          stringr::str_detect(path, pattern = normalised_path_ext[i])
+        ) %>% 
+        dplyr::pull(path) 
+    } else{ break }
     
   }
   
-  if(tolower(user) == "christian") {
-    
-    base_path <- "C:/Users/chris/OneDrive - 35 South/Shared Documents - Data Science/"
-    
+  if(length(returned_path) == 0) {
+    message("You path does not exist")
   }
   
-  if(user == "Nikhil Chandra") {
-    glue::glue("C:/Users/{user}/{team}/Documents - Data Science/")
-  }
+  return(returned_path)
   
-  glue::glue("{base_path}{path_extension}")
+}
+
+
+#' Detect the Users One Drive
+#' 
+#' This function will detect your one drive path.  
+#'
+#' @return (named character vector)
+#' @export
+#'
+#' @examples \dontrun{
+#' 
+#' one_drive_path <- detect_user_onedrive()
+#' 
+#' }
+detect_user_onedrive <- function() {
   
+  Sys.getenv(x = NULL, unset = "", names = NA) %>% 
+    purrr::keep(~ str_detect(.x, "OneDrive"))
   
 }

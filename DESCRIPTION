@@ -17,7 +17,13 @@ Imports:
     DBI, 
     glue, 
     RSQLite,
-    sf
+    sf, 
+    fs, 
+    readr, 
+    janitor, 
+    stringr, 
+    readxl, 
+    janitor
 Suggests: 
     roxygen2,
     spelling,
