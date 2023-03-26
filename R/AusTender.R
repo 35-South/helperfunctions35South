@@ -40,9 +40,9 @@
 #'     )    
 #' 
 #' }
-read_in_local_dashboard_exports <- function(base_path = 
-                                              create_one_drive_path(path_extension = "raw data/AusTender_data/raw_exports")
-                                            ) {
+get_austender_local <- function(base_path = 
+                                create_one_drive_path(path_extension = "raw data/AusTender_data/raw_exports")
+                                ) {
   
   local_dashboard_exports <- fs::dir_info(base_path) %>%
     dplyr::filter(stringr::str_detect(path, "Overview Export_Export_data")) %>%

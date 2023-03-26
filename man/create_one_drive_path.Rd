@@ -4,23 +4,20 @@
 \alias{create_one_drive_path}
 \title{Create One Drive file Path}
 \usage{
-create_one_drive_path(
-  user = "Nikhil Chandra",
-  team = "OneDrive - 35 South",
-  path_extension = "raw data/abs_geo_structures"
-)
+create_one_drive_path(user = NULL, path_extension = "raw data/AusTender_data")
 }
 \arguments{
 \item{user}{(character) This is your user name. Example: "Nikhil Chandra"}
-
-\item{team}{(character) This is the Team name on sharepoint. The default is
-"OneDrive - 35 South", it is unlikley you will have to change this.}
 
 \item{path_extension}{(character) This should be the path after
 "C:/Users/Nikhil Chandra/OneDrive - 35 South/Documents - Data Science/". This
 is the base path, if your file is in the folder raw_data/abs_anzic_income_SA2
 with the file name "sa2_income_industry.csv" then you would provide
-"raw_data/abs_anzic_income_SA2/sa2_income_industry.csv"}
+"raw_data/abs_anzic_income_SA2/sa2_income_industry.csv". YOUR PATH MUST
+NOT HAVE THE WINDOWS PATH FORM USING \. YOU MUST USE /.}
+
+\item{team}{(character) This is the Team name on sharepoint. The default is
+"OneDrive - 35 South", it is unlikley you will have to change this.}
 }
 \value{
 (file path) This function will return the file path based on your
@@ -31,6 +28,11 @@ This function will return a file path for your one drive path. You must provide
 it your user name for it to create the appropriate path. You will also need
 to provide the path extension which the part of the path after the root
 'Documents - Data Science' directory in
+}
+\details{
+known users:
+
+sam, ryan, sonal, christian, janet
 }
 \examples{
 \dontrun{
@@ -44,5 +46,30 @@ file_path <-
   
 data_read<- read_csv(file_path)
 
+# If you want to get AusTender data: 
+
+# Auto Guess Path:
+path_for_data <- 
+  create_one_drive_path(path_extension = "raw_data/AusTender_data")
+  
+files_in_folder <- 
+  fs::dir_info(path_for_data) \%>\% 
+  dplyr::pull(path) 
+ 
+read_in_first_csv_file <- read_csv(files_in_folder[1])
+
+# Dont Auto Guess Path     
+
+path_for_data <- 
+  create_one_drive_path(
+  user = "janet",
+  path_extension = "raw_data/AusTender_data"
+  )
+  
+files_in_folder <- 
+  fs::dir_info(path_for_data) \%>\% 
+  dplyr::pull(path) 
+ 
+read_in_first_csv_file <- read_csv(files_in_folder[1])
 }
 }
