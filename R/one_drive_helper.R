@@ -143,6 +143,6 @@ create_one_drive_path <- function(user = NULL,
 detect_user_onedrive <- function() {
   
   Sys.getenv(x = NULL, unset = "", names = NA) %>% 
-    purrr::keep(~ str_detect(.x, "OneDrive"))
+    purrr::keep(~ stringr::str_detect(.x, "OneDrive"))
   
 }
