@@ -54,7 +54,7 @@ get_austender_local <- function(base_path =
     )
   
   local_csv_data_joined <- local_csv_data %>%
-    purrr::map_dfr(bind_rows) %>%
+    purrr::map_dfr(dplyr::bind_rows) %>%
     janitor::clean_names()
   
   return(local_csv_data_joined)
